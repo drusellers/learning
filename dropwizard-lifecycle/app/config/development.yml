@@ -1,0 +1,25 @@
+server:
+  type: simple
+  applicationContextPath: /
+  adminContextPath: /admin
+
+  connector:
+    type: http
+    port: 9091
+
+logging:
+  level: INFO
+
+  loggers:
+    "dippy": TRACE
+    "org.hibernate": WARN
+    "org.hibernate.SQL": DEBUG
+    "io.dropwizard": OFF
+    "io.dropwizard.jersey.jackson": OFF
+    "org.eclipse": OFF
+
+  appenders:
+    - type: console
+      threshold: ALL
+      timeZone: UTC
+      target: stdout
