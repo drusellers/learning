@@ -1,0 +1,105 @@
+#!/bin/bash
+
+DB_NAME=learning
+
+PG_USER=$(whoami)
+export PGPASSWORD
+PGPASSWORD=password
+export PGHOST=${PGHOST-localhost}
+export PGPORT=${PGPORT-5432}
+
+RESET=0
+CREATE_MIGRATION=0
+DB_PULL=0
+HARD=0
+
+# options parsing
+while [[ $# -gt 0 ]]; do
+  key="$1"
+  case $key in
+    --reset)
+    RESET=1
+    shift
+    ;;
+    --hard)
+    HARD=1
+    shift
+    ;;
+    --create)
+    CREATE_MIGRATION=1
+    shift
+    MIGRATION_NAME="$1"
+    shift
+    ;;
+    --help|-h)
+    # TODO: introspect and print header comments
+    # Cf. https://github.com/basecamp/sub/blob/master/libexec/sub-help
+    cat <<EOM
+Usage: db [--reset] [--create NAME]
+
+The db command
+
+Options:
+  --reset        flattens the database and starts over
+  --create NAME  creates a new migration
+EOM
+    exit
+    ;;
+  esac
+done
+
+if docker ps --format '{{.Names}}' | grep -qw "postgres"; then
+    echo "Docker PG is Running"
+else
+    echo "Docker PG is not running"
+    echo "Run 'scripts/services'"
+    exit 1
+fi
+
+local_drop_connections() {
+  echo "Closing all connections to '$1'"
+  psql -h "$PGHOST" -p "$PGPORT" -d postgres \
+        --command "SELECT pg_terminate_backend(pg_stat_activity.pid) FROM pg_stat_activity WHERE pg_stat_activity.datname='$1'"
+}
+
+# Drop a local Postgres database, if it exists
+local_drop() {
+	if  psql -lqt | cut -d \| -f 1 | grep -qw $1 ; then
+		echo "Dropping existing local database: $1"
+		local_drop_connections "$1"
+		dropdb "$1"
+	else
+		echo "Local database doesn't exist: $1"
+	fi
+}
+
+
+(
+  if [[ $RESET -eq 1 ]]; then
+    for db in $DB_NAME; do
+      local_drop "$db"
+    done
+
+    createdb 'learning'
+#    psql -v ON_ERROR_STOP=1 --username "$PG_USER" --dbname "postgres" <<-SQL
+#        CREATE ROLE learning WITH LOGIN PASSWORD 'learning' superuser createdb;
+#        GRANT ALL PRIVILEGES ON DATABASE learning TO learning;
+#SQL
+    if [[ $HARD -eq 1 ]]; then
+      rm -rf ./Migrations
+    fi
+  fi
+
+  if [[ $CREATE_MIGRATION -eq 1 ]]; then
+    for project in './CoreDatabase.csproj'; do
+      echo "Creating a migration: $MIGRATION_NAME for $project"
+      dotnet ef migrations add "$MIGRATION_NAME" --project $project
+    done
+  fi
+
+  # echo "running latest migrations"
+  for project in './CoreDatabase.csproj'; do
+    echo "Migrate $project"
+    dotnet ef database update --project $project
+  done
+)
