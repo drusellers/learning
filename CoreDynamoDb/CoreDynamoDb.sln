@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Learning.DynamoDB", "Learning.DynamoDB\Learning.DynamoDB.csproj", "{941355D5-F512-4D1C-BDA5-20CF3C9EEDFB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Host", "Host\Host.csproj", "{1B7E0057-5D1F-4DD7-A02D-DA30558A4411}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{941355D5-F512-4D1C-BDA5-20CF3C9EEDFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{941355D5-F512-4D1C-BDA5-20CF3C9EEDFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{941355D5-F512-4D1C-BDA5-20CF3C9EEDFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{941355D5-F512-4D1C-BDA5-20CF3C9EEDFB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B7E0057-5D1F-4DD7-A02D-DA30558A4411}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B7E0057-5D1F-4DD7-A02D-DA30558A4411}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B7E0057-5D1F-4DD7-A02D-DA30558A4411}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B7E0057-5D1F-4DD7-A02D-DA30558A4411}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

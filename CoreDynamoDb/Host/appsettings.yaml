@@ -1,0 +1,4 @@
+Dynamo:
+  AccessKey: a
+  SecretKey: b
+  TableName: Identities
