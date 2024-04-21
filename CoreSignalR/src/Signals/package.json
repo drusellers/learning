@@ -1,0 +1,7 @@
+{
+  "name": "Learning.Signals",
+  "version": "1.0.0",
+  "dependencies": {
+    "@microsoft/signalr": "^6.0.6"
+  }
+}
