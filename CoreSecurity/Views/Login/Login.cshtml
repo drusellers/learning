@@ -1,0 +1,38 @@
+@model CoreSecurity.Controllers.LoginController.LoginRequest
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>title</title>
+</head>
+<body>
+<div>
+    <form action="#" method="POST">
+        <label>Username</label>
+        <input type="text" name="Username" value="@Model.Username" />
+        <hr />
+        <label>Password</label>
+        <input type="password" name="Password" value="@Model.Password" />
+        <br/>
+        <button type="submit">Submit</button>
+    </form>
+    <hr />
+    @foreach (var scheme in Model.Schemes)
+    {
+        <form action="/login" method="POST">
+            <input type="hidden" name="Provider" value="@scheme.Name" />
+            <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
+
+            <button type="submit">
+                Sign in using @scheme.DisplayName
+            </button>
+        </form>
+    }
+</div>
+</body>
+</html>

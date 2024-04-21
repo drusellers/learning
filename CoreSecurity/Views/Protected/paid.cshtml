@@ -1,0 +1,31 @@
+@model dynamic
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>title</title>
+</head>
+<body>
+<div>
+    PAID - <a href="/admin">Go Admin</a>  
+    <hr/>
+    IAM - <a href="/iam">Go IAM</a>
+    <hr/>
+    User: @User.Identity?.Name<br/>
+    <ul>
+    @foreach (var claim in User.Claims)
+    {
+        <li>
+            <strong>@claim.Type</strong>
+            @claim.Value
+        </li>
+    }
+    </ul>
+</div>
+</body>
+</html>

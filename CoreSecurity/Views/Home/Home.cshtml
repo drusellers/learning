@@ -1,0 +1,30 @@
+@model dynamic
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>title</title>
+</head>
+<body>
+<div>
+    <a href="/login">Login</a>
+
+    <div>
+        User: @User.Identity?.Name
+    </div>
+
+    <div>
+        <ul>
+            <li>Paid: <a href="/paid">Go</a> (requires login)</li>
+            <li>Admin: <a href="/admin">Go</a> (requires github)</li>
+
+        </ul>
+    </div>
+</div>
+</body>
+</html>
