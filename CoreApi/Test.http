@@ -1,0 +1,22 @@
+### Converting an Error into JSON
+GET http://localhost:5283/error
+
+
+###
+POST http://localhost:5283/invalid
+Content-Type: application/json
+
+{
+  "name": "bob"
+}
+
+###
+POST https://localhost:7259/WeatherForecast
+Content-Type: application/json
+
+{
+  "name": "bob"
+}
+
+###
+GET https://localhost:7259/WeatherForecast/Error
