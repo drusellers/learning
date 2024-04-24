@@ -15,5 +15,11 @@
     <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.2" />
     <PackageReference Include="NetEscapades.Configuration.Yaml" Version="3.1.0" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <Content Include="*.yaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
 </Project>
