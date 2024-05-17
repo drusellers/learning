@@ -11,6 +11,8 @@ public static class Program
 {
     public static async Task<int> Main(string[] args)
     {
+        await Task.Delay(1);
+
         var host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((hostBuilder, services) =>
             {
