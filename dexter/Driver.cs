@@ -24,7 +24,10 @@ public class Driver: IAsyncEnumerable<OpenAI.Chat.Message>
         Messages.Add(new (Role.System, "You are a helpful user assistent."));
         Messages.Add(new (Role.User, _request));
 
-        Tools.Add(Tool.FromFunc("users_name", () => Task.FromResult("Dru"), "Gives you the user's name"));
+
+        Tools.Add(Tool.FromFunc("users_name",
+            () => Task.FromResult("Dru"),
+            "Gives you the user's name"));
     }
 
 
@@ -33,6 +36,7 @@ public class Driver: IAsyncEnumerable<OpenAI.Chat.Message>
         foreach (var m in Messages)
             yield return m;
 
+        _logger.Information("INITIAL");
         // initial prompt
         var chatRequest = new ChatRequest(Messages, tools: Tools, toolChoice: "auto");
         var response = await _client.ChatEndpoint.GetCompletionAsync(chatRequest, ct);
