@@ -80,7 +80,7 @@ public static class Program
         // await IdentityMap(host);
         // await DemonstrateUnionQueries(host);
         // await DemonstrateUniqueIndexes(host);
-        // await SaveAGraph(host);
+        await SaveAGraph(host);
 
         return 0;
     }
@@ -104,6 +104,12 @@ public static class Program
         var entries = cxt.ChangeTracker.Entries().ToList();
 
         await cxt.SaveChangesAsync();
+
+        var count = await cxt.Entry(user).Collection(p => p.Messages).Query().CountAsync();
+
+        await cxt.Users
+            .Where(u => u.Id == user.Id)
+            .ExecuteUpdateAsync(n => n.SetProperty(p => p.MessageCount, _ => count));
     }
 
     static async Task DemonstrateUnionQueries(IHost host)

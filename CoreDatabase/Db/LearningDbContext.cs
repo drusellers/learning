@@ -39,11 +39,16 @@ public class LearningDbContext : DbContext
             .HasIndex(x => x.Name).IsUnique();
 
         modelBuilder.Entity<User>()
-            .Property(u => u.SearchVector)
-            .HasColumnType("tsvector");
-        modelBuilder.Entity<User>()
-            .HasIndex(u => u.SearchVector)
+            .HasGeneratedTsVectorColumn(
+                p => p.SearchVector,
+                "english",  // Text search config
+                p => new { p.Name })  // Included properties
+            .HasIndex(p => p.SearchVector)
             .HasMethod("GIN");
+
+        modelBuilder.Entity<User>()
+            .HasMany(x => x.Messages)
+            .WithOne(m => m.User);
 
 
         // could be hundreds in the end
