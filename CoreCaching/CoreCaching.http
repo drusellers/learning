@@ -1,0 +1,8 @@
+@CoreCaching_HostAddress = http://localhost:5184
+
+GET {{CoreCaching_HostAddress}}/weatherforecast/
+Accept: application/json
+Authorization: Basic dru:bilbo
+#Cache-Control: public, max-age=10
+
+###
