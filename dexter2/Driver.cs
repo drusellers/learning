@@ -8,21 +8,21 @@ public class Driver: IAsyncEnumerable<OpenAI.Chat.Message>
 {
     readonly OpenAIClient _client;
     readonly ILogger _logger;
-    readonly string _request;
+    readonly string _usersQuestion;
     public List<OpenAI.Chat.Message> Messages { get; set; } = new();
     public List<Tool> Tools { get; } = new();
     public int? RemainingTokens { get; private set; }
     public int? TotalTokens { get; private set; }
 
-    public Driver(OpenAiOptions options, string request)
+    public Driver(OpenAiOptions options, string usersQuestion)
     {
         _logger = Log.ForContext<Driver>();
 
         _client = new OpenAIClient(options.ApiKey);
-        _request = request;
+        _usersQuestion = usersQuestion;
 
-        Messages.Add(new (Role.System, "You are a helpful user assistent."));
-        Messages.Add(new (Role.User, _request));
+        Messages.Add(new (Role.System, "You are a helpful user assistant."));
+        Messages.Add(new (Role.User, _usersQuestion));
 
 
         Tools.Add(Tool.FromFunc("users_name",

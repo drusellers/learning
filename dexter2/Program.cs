@@ -1,15 +1,13 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-using Dexter;
+﻿using Dexter;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Core;
+using Serilog.Events;
 
-var levelSwitch = new LoggingLevelSwitch();
-using var logger = new LoggerConfiguration()
+var levelSwitch = new LoggingLevelSwitch(LogEventLevel.Debug);
+await using var logger = new LoggerConfiguration()
     .Enrich.FromLogContext()
     .MinimumLevel.ControlledBy(levelSwitch)
-    // .WriteTo.Console(new RenderedCompactJsonFormatter())
     .WriteTo.Console()
     .CreateLogger();
 Log.Logger = logger;
@@ -17,16 +15,11 @@ Log.Logger = logger;
 var config = new ConfigurationBuilder()
     .AddYamlFile("appsettings.yaml", true)
     .AddYamlFile("appsettings.Development.yaml", true)
-    // .AddDotEnvFile()
-    // .AddEnvironmentVariables()
     .Build();
 
 var oa = config.GetSection(OpenAiOptions.ConfigKey).Get<OpenAiOptions>();
 
 var driver = new Driver(oa!, "What is the user's name?");
-
-// TODO: Add Events to Trigger Hub Events
-// TODO: Enumerate "NEW" events
 
 // draw initial messages
 await foreach (var message in driver)
