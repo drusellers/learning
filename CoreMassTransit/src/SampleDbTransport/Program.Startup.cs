@@ -49,18 +49,6 @@ public class Startup
 
             cfg.UsingPostgres((context, transport) =>
             {
-                // transport.Host(new PostgresSqlHostSettings(new SqlTransportOptions()
-                // {
-                //     Host = "localhost",
-                //     Username = "learning",
-                //     Password = "learning",
-                //     AdminPassword = "learning",
-                //     AdminUsername = "learning",
-                //     Port = 5432,
-                //     Database = "learning_development"
-                // }));
-                // transport.Host(new PostgresSqlHostSettings("Host=localhost;Port=5432;Database=learning_development;Username=learning;Password=learning;Include Error Detail=true;"));
-
                 transport.ConfigureEndpoints(context);
             });
         });

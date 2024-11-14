@@ -2,17 +2,16 @@ namespace Learning.MT.Api;
 
 using Learning.MT.Activities;
 using MassTransit;
-using MassTransit.Courier.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("start")]
 [ApiController]
-public class StartController : ControllerBase
+public class RoutingSlipController : ControllerBase
 {
     readonly IBus _bus;
     readonly IEndpointNameFormatter _formatter;
 
-    public StartController(IBus bus, IEndpointNameFormatter formatter)
+    public RoutingSlipController(IBus bus, IEndpointNameFormatter formatter)
     {
         _bus = bus;
         _formatter = formatter;

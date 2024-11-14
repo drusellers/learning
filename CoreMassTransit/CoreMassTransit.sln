@@ -12,6 +12,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_ops", "_ops", "{1192A67D-5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleDbTransport", "src\SampleDbTransport\SampleDbTransport.csproj", "{440DF06C-3DE8-4794-BB9E-D1921D00919D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSagas", "src\SampleSagas\SampleSagas.csproj", "{B38F3BF9-B677-48FA-AD6E-16D569D2EC8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleDbJobs", "src\SampleDbJobs\SampleDbJobs.csproj", "{FA567A29-DABD-477C-A897-FBE3663CED87}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,5 +33,13 @@ Global
 		{440DF06C-3DE8-4794-BB9E-D1921D00919D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{440DF06C-3DE8-4794-BB9E-D1921D00919D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{440DF06C-3DE8-4794-BB9E-D1921D00919D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B38F3BF9-B677-48FA-AD6E-16D569D2EC8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B38F3BF9-B677-48FA-AD6E-16D569D2EC8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B38F3BF9-B677-48FA-AD6E-16D569D2EC8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B38F3BF9-B677-48FA-AD6E-16D569D2EC8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FA567A29-DABD-477C-A897-FBE3663CED87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FA567A29-DABD-477C-A897-FBE3663CED87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FA567A29-DABD-477C-A897-FBE3663CED87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FA567A29-DABD-477C-A897-FBE3663CED87}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
