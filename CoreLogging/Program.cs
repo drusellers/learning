@@ -10,13 +10,14 @@ using Serilog.Sinks.SystemConsole.Themes;
 using SerilogTimings;
 using SerilogTimings.Extensions;
 
+var template = "[{Timestamp:HH:mm:ss} {Level:u3}] {Message:lj}{NewLine}{Exception}";
 var levelSwitch = new LoggingLevelSwitch();
 using var logger = new LoggerConfiguration()
     .Enrich.FromLogContext()
     .MinimumLevel.ControlledBy(levelSwitch)
     // You can see all of the logging payload with JSON
     // .WriteTo.Console(new RenderedCompactJsonFormatter())
-    .WriteTo.Console(theme: AnsiConsoleTheme.Code)
+    .WriteTo.Console(outputTemplate: template, theme: AnsiConsoleTheme.Code)
     // .WriteTo.Console()
     .CreateLogger();
 Log.Logger = logger;
