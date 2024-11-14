@@ -6,14 +6,30 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Models;
+using Serilog;
+using Serilog.Core;
+using Serilog.Sinks.SystemConsole.Themes;
 
 public static class Program
 {
     public static async Task<int> Main(string[] args)
     {
-        await Task.Delay(1);
+        await Task.Yield();
+
+        // var template = "[{Level:u3} {SourceContext}] {Message:lj}{NewLine}{Exception}";
+        var template = "[{Level:u3}] {Message:lj}{NewLine}{Exception}";
+        using var logger = new LoggerConfiguration()
+            .Enrich.FromLogContext()
+            .MinimumLevel.Debug()
+            // You can see all of the logging payload with JSON
+            // .WriteTo.Console(new RenderedCompactJsonFormatter())
+            .WriteTo.Console(outputTemplate: template, theme: AnsiConsoleTheme.Code)
+            // .WriteTo.Console()
+            .CreateLogger();
+        Log.Logger = logger;
 
         var host = Host.CreateDefaultBuilder(args)
+            .UseSerilog()
             .ConfigureServices((hostBuilder, services) =>
             {
                 var conn = hostBuilder.Configuration.GetConnectionString("Learning");
@@ -26,6 +42,94 @@ public static class Program
             })
             .Build();
 
+
+        // set up the data
+        using(var scope = host.Services.CreateScope())
+        {
+            var cxt = scope.ServiceProvider.GetRequiredService<LearningDbContext>();
+
+            var user = new User("Dru");
+            var message = new Message();
+            message.Payload = "NEAT";
+            user.Messages.Add(message);
+
+            await cxt.AddAsync(user);
+            await cxt.SaveChangesAsync();
+        }
+
+        // delete and add a line
+        using (var scope = host.Services.CreateScope())
+        {
+            var cxt = scope.ServiceProvider.GetRequiredService<LearningDbContext>();
+            var user = await cxt.Users.Where(x => x.Name == "Dru")
+                .Include(x => x.Messages)
+                .FirstAsync();
+
+            user.Messages.Clear();
+            var message = new Message();
+            message.Payload = "NEAT2";
+            user.Messages.Add(message);
+            cxt.Update(user);
+            await cxt.SaveChangesAsync();
+
+        }
+
+        // await EnsureChecks(host);
+        // DemoEfcoreDebug(host);
+        // await IdentityMap(host);
+        // await DemonstrateUnionQueries(host);
+        // await DemonstrateUniqueIndexes(host);
+        // await SaveAGraph(host);
+
+        return 0;
+    }
+
+    static async Task EnsureChecks(IHost host)
+    {
+        // Ensure Test (non exist)
+        using (var scope = host.Services.CreateScope())
+        {
+            var cxt = scope.ServiceProvider.GetRequiredService<LearningDbContext>();
+            await cxt.Set<Queue>().Where(x => x.Name == "Ensure")
+                .ExecuteDeleteAsync();
+            await cxt.Set<Queue>().Where(x => x.Name == "Ensure-Exist")
+                .ExecuteDeleteAsync();
+            var queue1 = new Queue()
+            {
+                Name = "Ensure-Exist"
+            };
+            await cxt.AddAsync(queue1);
+            await cxt.SaveChangesAsync();
+        }
+
+        using (var scope = host.Services.CreateScope())
+        {
+            var cxt = scope.ServiceProvider.GetRequiredService<LearningDbContext>();
+            var queue1 = new Queue()
+            {
+                Name = "Ensure"
+            };
+            await cxt.AddAsync(queue1);
+            await cxt.SaveChangesAsync();
+
+            cxt.Update(queue1);
+            await cxt.SaveChangesAsync();
+        }
+
+        // Ensure Test (exist)
+        using (var scope = host.Services.CreateScope())
+        {
+            var cxt = scope.ServiceProvider.GetRequiredService<LearningDbContext>();
+            var queue1 = await cxt.Set<Queue>().Where(x => x.Name == "Ensure-Exist")
+                .FirstAsync();
+
+            cxt.Update(queue1);
+            await cxt.SaveChangesAsync();
+        }
+    }
+
+    static void DemoEfcoreDebug(IHost host)
+    {
         using (var debugScope =  host.Services.CreateScope())
         using (var debugCxt =  debugScope.ServiceProvider.GetRequiredService<LearningDbContext>())
         {
@@ -34,55 +138,6 @@ public static class Program
             var designModel = debugCxt.GetService<IDesignTimeModel>();
             Console.WriteLine(designModel.Model.ToDebugString());
         }
-
-
-        // Ensure Test (non exist)
-        // using (var scope = host.Services.CreateScope())
-        // {
-        //     var cxt = scope.ServiceProvider.GetRequiredService<LearningDbContext>();
-        //     await cxt.Set<Queue>().Where(x => x.Name == "Ensure")
-        //         .ExecuteDeleteAsync();
-        //     await cxt.Set<Queue>().Where(x => x.Name == "Ensure-Exist")
-        //         .ExecuteDeleteAsync();
-        //     var queue1 = new Queue()
-        //     {
-        //         Name = "Ensure-Exist"
-        //     };
-        //     await cxt.AddAsync(queue1);
-        //     await cxt.SaveChangesAsync();
-        // }
-        //
-        // using (var scope = host.Services.CreateScope())
-        // {
-        //     var cxt = scope.ServiceProvider.GetRequiredService<LearningDbContext>();
-        //     var queue1 = new Queue()
-        //     {
-        //         Name = "Ensure"
-        //     };
-        //     await cxt.AddAsync(queue1);
-        //     await cxt.SaveChangesAsync();
-        //
-        //     cxt.Update(queue1);
-        //     await cxt.SaveChangesAsync();
-        // }
-        //
-        // // Ensure Test (exist)
-        // using (var scope = host.Services.CreateScope())
-        // {
-        //     var cxt = scope.ServiceProvider.GetRequiredService<LearningDbContext>();
-        //     var queue1 = await cxt.Set<Queue>().Where(x => x.Name == "Ensure-Exist")
-        //         .FirstAsync();
-        //
-        //     cxt.Update(queue1);
-        //     await cxt.SaveChangesAsync();
-        // }
-
-        // await IdentityMap(host);
-        // await DemonstrateUnionQueries(host);
-        // await DemonstrateUniqueIndexes(host);
-        await SaveAGraph(host);
-
-        return 0;
     }
 
     /// <summary>
