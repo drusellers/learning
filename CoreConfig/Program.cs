@@ -75,6 +75,23 @@ Console.WriteLine(snapshot.Get("Name2"));
 
 
 
+
+Console.WriteLine();
+Console.WriteLine("..Change..");
+config.GetSection(SomeOptions.ConfigKey)["Name"] = "!UPDATED!";
+using var changed = x.CreateScope();
+var plain = changed.ServiceProvider.GetRequiredService<IOptions<SomeOptions>>();
+Console.WriteLine(plain.Value.Name);
+var snap = changed.ServiceProvider.GetRequiredService<IOptionsSnapshot<SomeOptions>>();
+Console.WriteLine(snap.Value.Name);
+var mon = changed.ServiceProvider.GetRequiredService<IOptionsMonitor<SomeOptions>>();
+Console.WriteLine(mon.CurrentValue.Name);
+
+
+
+
+
+
 public class SomeOptions
 {
     public const string ConfigKey = "Abc";
