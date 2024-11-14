@@ -1,0 +1,6 @@
+@CoreRequestCaching_HostAddress = http://localhost:5105
+
+GET {{CoreRequestCaching_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
