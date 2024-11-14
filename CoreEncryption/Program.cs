@@ -8,6 +8,8 @@ var agentPublicKey = "";
 var agentPrivateKey = "";
 
 var textToEncrypt = "Coco";
+Console.WriteLine("Initial Clear Text: {0}", textToEncrypt);
+
 var clearBytes = Encoding.UTF8.GetBytes(textToEncrypt);
 var cipherBytes = Array.Empty<byte>();
 var cipherSignature = Array.Empty<byte>();
@@ -42,7 +44,7 @@ using (var rsa = new RSACryptoServiceProvider())
     }
 }
 
-// FROM Kernel to Agent
+// FROM Kernel (Sender) to Agent (Receiver)
 // encrypt with Agent Public Key
 // sign with Kernel Private Key
 
@@ -60,13 +62,20 @@ using (var rsa = new RSACryptoServiceProvider())
 }
 
 Console.WriteLine("Cipher Text: {0}", Convert.ToBase64String(cipherBytes));
+Console.WriteLine("Cipher Sig : {0}", Convert.ToBase64String(cipherSignature));
+
 // Verify with Kernel Public Key
 using (var rsa = new RSACryptoServiceProvider())
 {
-    rsa.ImportFromPem(kernelPublicKey);
+    rsa.ImportFromPem(kernelPublicKey); // sender's public key
     if (rsa.VerifyData(cipherBytes, cipherSignature, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1))
     {
         Console.WriteLine("VERIFIED");
+    }
+    else
+    {
+        Console.WriteLine("BAD ACTOR");
+        return;
     }
 
     rsa.PersistKeyInCsp = false;
