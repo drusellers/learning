@@ -1,0 +1,22 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""document """
+type Document {
+  creationDate: DateTime!
+  description: String
+  id: ID!
+  ingredients: [String!]!
+  title: String!
+}
+
+type Query {
+  recipe(id: String!): Document!
+  recipes(skip: Int! = 0, take: Int! = 25): [Document!]!
+}

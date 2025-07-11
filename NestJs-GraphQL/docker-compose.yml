@@ -1,0 +1,24 @@
+services:
+
+  postgres:
+    image: postgres:14.1
+    restart: always
+    command: -c 'max_connections=190' ## match RDS prod.
+    environment:
+      - POSTGRES_DB=pursuit
+      - POSTGRES_USER=pursuit
+      - POSTGRES_PASSWORD=password
+    ports:
+      - '5432:5432'
+    volumes:
+      - ./ops/postgres/cfg/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh
+    networks:
+      - backend
+  
+
+volumes:
+  db:
+    driver: local
+
+networks:
+  backend:
